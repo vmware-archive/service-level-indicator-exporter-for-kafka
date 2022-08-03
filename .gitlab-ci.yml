@@ -1,0 +1,42 @@
+# needs `curl`, `jq` 1.5 and `${PRIVATE_TOKEN}, cf.:
+# - https://docs.gitlab.com/ee/api/#personal-access-tokens
+# - https://docs.gitlab.com/ce/ci/variables/README.html#secret-variables
+variables:
+  GIT_DEPTH: 100
+  GIT_SUBMODULE_STRATEGY: recursive
+  CI_SERVER_URL: https://gitlab.eng.vmware.com
+
+image: $RUNNER_IMAGE
+
+stages:
+  - validate
+
+before_script:
+  # ensure go tooling does not throw errors with vendor folder etc..
+  - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.eng.vmware.com/".insteadOf "https://gitlab.eng.vmware.com/"
+  # setup the pipeline
+  # pull base image every monday
+  - export DOCKER_BUILD_ARGS="${DOCKER_BUILD_ARGS} $([[ $(TZ=UTC date '+%u') == '1' ]] && echo "--pull")"
+  # invalidate build cache on a weekly basis
+  - export VDP_BUILD_GEN=$(TZ=UTC date '+%Y-%W')
+  # disable/enable image signing
+  - export VDP_NOTARY=notary.vdp.vmware.com
+  - git config --global core.abbrev 7
+  - export SHORT_COMMIT_SHA=v$(git rev-parse --short HEAD)
+  # setup docker login
+  - mkdir -p ~/.docker
+  - echo $DOCKER_AUTH_CONFIG > ~/.docker/config.json
+  - echo '************ setup complete **************'
+
+_mr:ticket_count:
+  stage: validate
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+  only:
+    refs:
+      - merge_requests
+  script:
+    - /usr/local/bin/get-jira-issue-count.sh
+    - /usr/local/bin/hotfix_notification.sh
