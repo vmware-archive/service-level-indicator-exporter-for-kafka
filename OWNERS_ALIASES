@@ -1,0 +1,85 @@
+aliases:
+  everyone:
+  - svc.vdpci
+  - dbrian
+  - torourke
+  - carpenterm
+  - dolininal
+  - dcampau
+  - morrisst
+  - dsanjeev
+  - coneill
+  - abaheti
+  - nafshan
+  - hoal
+  - senthilb
+  - vsamidurai
+  - jcorson
+  - svivekkumar
+  - rvyavahare
+  - rakshitp
+  - ulhaquem
+  - reshwarappa
+  - larsench
+  - hmishra
+  - jcriadomarco
+  - rzachary
+  - sankaraju
+  - uunma
+  - zshahid
+  - ffarouq
+  - imomchil
+  - akomal
+  - praluca
+  - hwarren
+  - penda
+  repository-owners:
+  - svc.vdpci
+  - dbrian
+  - torourke
+  - carpenterm
+  - dolininal
+  - dcampau
+  - morrisst
+  - dsanjeev
+  - coneill
+  - abaheti
+  - nafshan
+  - hoal
+  - senthilb
+  - vsamidurai
+  - hwarren
+  team-architecture:
+  - dbrian
+  - carpenterm
+  team-r&d:
+  - dcampau
+  - morrisst
+  - rvyavahare
+  team-sre:
+  - dolininal
+  - hoal
+  - vsamidurai
+  - rakshitp
+  - ulhaquem
+  - reshwarappa
+  - jcriadomarco
+  - sankaraju
+  - uunma
+  - zshahid
+  - imomchil
+  team-swe:
+  - dsanjeev
+  - coneill
+  - abaheti
+  - senthilb
+  - jcorson
+  - svivekkumar
+  - larsench
+  - hmishra
+  - rzachary
+  - ffarouq
+  - akomal
+  - praluca
+  - hwarren
+  - penda
