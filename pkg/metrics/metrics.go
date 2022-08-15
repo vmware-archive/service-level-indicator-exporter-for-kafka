@@ -21,9 +21,9 @@ var ErrorTotalMessageSend = prometheus.NewCounterVec(
 	[]string{"cluster", "topic"},
 )
 
-var ErrorClusterMessageSend = prometheus.NewGaugeVec(
+var ClusterUp = prometheus.NewGaugeVec(
 	prometheus.GaugeOpts{
-		Name: "kafka_monitoring_error_cluster_messages_send",
+		Name: "kafka_monitoring_cluster_up",
 		Help: "Kafka clusters with errors",
 	},
 	[]string{"cluster"},
@@ -37,10 +37,18 @@ var MessageSendDuration = prometheus.NewSummaryVec(
 	[]string{"cluster", "topic"},
 )
 
+var TotalMessageRead = prometheus.NewCounterVec(
+	prometheus.CounterOpts{
+		Name: "kafka_monitoring_total_messages_read",
+		Help: "Number of messages read for kafka consumer",
+	},
+	[]string{"cluster", "topic"},
+)
+
 func InitMetrics(cfg *config.Config) {
 	for _, cluster := range cfg.Kafka {
 		prometheus.Register(TotalMessageSend.WithLabelValues(cluster.BootstrapServer, cluster.Topic))
-		prometheus.Register(ErrorClusterMessageSend.WithLabelValues(cluster.BootstrapServer))
+		prometheus.Register(ClusterUp.WithLabelValues(cluster.BootstrapServer))
 		prometheus.Register(ErrorTotalMessageSend.WithLabelValues(cluster.BootstrapServer, cluster.Topic))
 		prometheus.Register(MessageSendDuration)
 	}

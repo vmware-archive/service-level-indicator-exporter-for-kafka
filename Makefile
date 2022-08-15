@@ -54,7 +54,7 @@ build-image: vendor ## Build docker image with the manager.
 	docker build -t ${IMG}:${TAG} $(DOCKER_BUILD_ARGS) .
 
 .PHONY: push-image
-push-image: ## Push docker image with the manager.
+push-image: build-image ## Push docker image with the manager.
 	docker push ${IMG}:${TAG}
 
 

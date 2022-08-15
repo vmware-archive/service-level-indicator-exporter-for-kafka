@@ -7,14 +7,12 @@ aliases:
   - dolininal
   - dcampau
   - morrisst
-  - dsanjeev
   - coneill
   - abaheti
   - nafshan
   - hoal
-  - senthilb
+  - sagarj2
   - vsamidurai
-  - jcorson
   - svivekkumar
   - rakshitp
   - ulhaquem
@@ -33,6 +31,7 @@ aliases:
   - hwarren
   - penda
   - ricardor2
+  - joses3
   repository-owners:
   - svc.vdpci
   - dbrian
@@ -41,18 +40,26 @@ aliases:
   - dolininal
   - dcampau
   - morrisst
-  - dsanjeev
   - coneill
   - abaheti
   - nafshan
   - hoal
-  - senthilb
   - vsamidurai
   - hwarren
+  team-api:
+  - dcampau
+  - morrisst
+  - svivekkumar
+  - ffarouq
+  - akomal
+  - praluca
+  - hwarren
+  - penda
+  - ricardor2
+  - joses3
   team-architecture:
   - dbrian
   - carpenterm
-  team-r&d:
   - dcampau
   - morrisst
   team-sre:
@@ -68,11 +75,8 @@ aliases:
   - zshahid
   - imomchil
   team-swe:
-  - dsanjeev
-  - coneill
   - abaheti
-  - senthilb
-  - jcorson
+  - sagarj2
   - svivekkumar
   - larsench
   - hmishra
@@ -80,6 +84,6 @@ aliases:
   - ffarouq
   - akomal
   - praluca
-  - hwarren
   - penda
   - ricardor2
+  - joses3
