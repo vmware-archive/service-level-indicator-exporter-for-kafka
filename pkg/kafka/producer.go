@@ -67,9 +67,9 @@ func (k *producer) Start() {
 		timer := prometheus.NewTimer(metrics.MessageSendDuration.WithLabelValues(k.BootstrapServer, k.Topic))
 		err := k.sendMessage(message)
 		if err != nil {
-			metrics.ErrorClusterMessageSend.WithLabelValues(k.BootstrapServer).Set(1)
+			metrics.ClusterUp.WithLabelValues(k.BootstrapServer).Set(0)
 		} else {
-			metrics.ErrorClusterMessageSend.WithLabelValues(k.BootstrapServer).Set(0)
+			metrics.ClusterUp.WithLabelValues(k.BootstrapServer).Set(1)
 		}
 		timer.ObserveDuration()
 	}

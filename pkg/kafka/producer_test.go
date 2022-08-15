@@ -36,6 +36,7 @@ func TestProducer(t *testing.T) {
 		expectErr                     bool
 		expectedTotalMessageSend      float64
 		expectedErrorTotalMessageSend float64
+		expectedClusterUp             float64
 	}{
 		{
 			kafkaConfig: msConfig.KafkaConfig{
@@ -45,6 +46,7 @@ func TestProducer(t *testing.T) {
 			expectErr:                     true,
 			expectedTotalMessageSend:      0,
 			expectedErrorTotalMessageSend: 0,
+			expectedClusterUp:             0,
 		},
 		{
 			kafkaConfig: msConfig.KafkaConfig{
@@ -54,6 +56,7 @@ func TestProducer(t *testing.T) {
 			expectErr:                     false,
 			expectedTotalMessageSend:      1,
 			expectedErrorTotalMessageSend: 0,
+			expectedClusterUp:             1,
 		},
 	}
 	for _, config := range configs {
@@ -71,6 +74,7 @@ func TestProducer(t *testing.T) {
 		}
 
 		assert.Equal(config.expectedTotalMessageSend, testutil.ToFloat64(metrics.TotalMessageSend.WithLabelValues(config.kafkaConfig.BootstrapServer, config.kafkaConfig.Topic)))
+		assert.Equal(config.expectedErrorTotalMessageSend, testutil.ToFloat64(metrics.ErrorTotalMessageSend.WithLabelValues(config.kafkaConfig.BootstrapServer, config.kafkaConfig.Topic)))
 		assert.Equal(config.expectedErrorTotalMessageSend, testutil.ToFloat64(metrics.ErrorTotalMessageSend.WithLabelValues(config.kafkaConfig.BootstrapServer, config.kafkaConfig.Topic)))
 
 	}
