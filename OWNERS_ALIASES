@@ -42,18 +42,27 @@ aliases:
   - dolininal
   - dcampau
   - morrisst
-  - dsanjeev
   - coneill
   - abaheti
   - nafshan
   - hoal
-  - senthilb
   - vsamidurai
   - hwarren
+  team-api:
+  - dcampau
+  - morrisst
+  - dsanjeev
+  - svivekkumar
+  - ffarouq
+  - akomal
+  - praluca
+  - hwarren
+  - penda
+  - ricardor2
+  - joses3
   team-architecture:
   - dbrian
   - carpenterm
-  team-r&d:
   - dcampau
   - morrisst
   team-sre:
@@ -69,8 +78,6 @@ aliases:
   - zshahid
   - imomchil
   team-swe:
-  - dsanjeev
-  - coneill
   - abaheti
   - sagarj2
   - senthilb
@@ -78,10 +85,3 @@ aliases:
   - larsench
   - hmishra
   - rzachary
-  - ffarouq
-  - akomal
-  - praluca
-  - hwarren
-  - penda
-  - ricardor2
-  - joses3
