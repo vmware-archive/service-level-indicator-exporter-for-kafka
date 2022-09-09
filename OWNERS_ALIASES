@@ -7,13 +7,11 @@ aliases:
   - dolininal
   - dcampau
   - morrisst
-  - dsanjeev
   - coneill
   - abaheti
   - nafshan
   - hoal
   - sagarj2
-  - senthilb
   - vsamidurai
   - svivekkumar
   - rakshitp
@@ -51,7 +49,6 @@ aliases:
   team-api:
   - dcampau
   - morrisst
-  - dsanjeev
   - svivekkumar
   - ffarouq
   - akomal
@@ -80,8 +77,13 @@ aliases:
   team-swe:
   - abaheti
   - sagarj2
-  - senthilb
   - svivekkumar
   - larsench
   - hmishra
   - rzachary
+  - ffarouq
+  - akomal
+  - praluca
+  - penda
+  - ricardor2
+  - joses3
