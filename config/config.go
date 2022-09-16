@@ -25,9 +25,14 @@ type TlsConfig struct {
 	ClientCert  string
 	ClientKey   string
 }
+
+type Log struct {
+	Level string
+}
 type Config struct {
 	Prometheus PrometheusConfig
 	Kafka      []KafkaConfig
+	Log        Log
 }
 
 var Instance *Config

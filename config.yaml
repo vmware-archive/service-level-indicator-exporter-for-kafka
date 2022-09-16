@@ -1,6 +1,8 @@
 prometheus:
   prometheusPort: 8080
   prometheusServer: localhost
+log:
+  level: info
 kafka:
   - bootstrapServer: localhost:9092
     topic: kafka-monitoring
