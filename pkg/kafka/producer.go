@@ -83,7 +83,7 @@ func (k *producer) sendMessage(msg *sarama.ProducerMessage) error {
 		return err
 	} else {
 		metrics.TotalMessageSend.WithLabelValues(k.BootstrapServer, k.Topic).Inc()
-		logrus.Info("Message was saved to partion: " + strconv.Itoa(int(partition)) + ". Message offset is: " + strconv.Itoa(int(offset)))
+		logrus.Debug("Message was saved to partion: " + strconv.Itoa(int(partition)) + ". Message offset is: " + strconv.Itoa(int(offset)))
 		return nil
 	}
 }

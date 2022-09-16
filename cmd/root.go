@@ -46,10 +46,21 @@ func init() {
 
 func initCommand() {
 
-	logrus.SetFormatter(&logrus.JSONFormatter{})
-	// Only log the warning severity or above.
-	logrus.SetLevel(logrus.InfoLevel)
 	createConfig()
+	// Only log the warning severity or above.
+	logrus.SetFormatter(&logrus.JSONFormatter{})
+	// LOG_LEVEL not set, let's default to info
+	lvl := config.Instance.Log.Level
+	if len(lvl) == 0 {
+		lvl = "info"
+	}
+	// parse string, this is built-in feature of logrus
+	ll, err := logrus.ParseLevel(lvl)
+	if err != nil {
+		ll = logrus.DebugLevel
+	}
+	// set global log level
+	logrus.SetLevel(ll)
 	metrics.InitMetrics(config.Instance)
 }
 func createConfig() {
