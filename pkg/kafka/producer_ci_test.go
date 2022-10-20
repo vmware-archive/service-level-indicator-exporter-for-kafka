@@ -1,22 +1,19 @@
-//go:build !ci
-// +build !ci
+//go:build ci
+// +build ci
 
 package kafka
 
 import (
-	"testing"
-
 	"github.com/Shopify/sarama"
 	"github.com/prometheus/client_golang/prometheus/testutil"
 	"github.com/stretchr/testify/assert"
 	msConfig "gitlab.eng.vmware.com/vdp/vdp-kafka-monitoring/config"
 	"gitlab.eng.vmware.com/vdp/vdp-kafka-monitoring/pkg/metrics"
+	"testing"
 )
 
-func TestProducer(t *testing.T) {
-	kafka := startEnviron()
+func TestCIProducer(t *testing.T) {
 	assert := assert.New(t)
-	defer destroyKafka(kafka)
 	configs := []testConfig{
 		{
 			kafkaConfig: msConfig.KafkaConfig{

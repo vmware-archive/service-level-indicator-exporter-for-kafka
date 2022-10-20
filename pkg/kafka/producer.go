@@ -3,6 +3,7 @@ package kafka
 import (
 	"log"
 	"strconv"
+	"time"
 
 	"gitlab.eng.vmware.com/vdp/vdp-kafka-monitoring/pkg/metrics"
 
@@ -36,6 +37,11 @@ func NewProducer(config config.KafkaConfig) (Producer KafkaProducer, err error) 
 	producerInstance.KafkaConfig.Producer.Partitioner = sarama.NewRandomPartitioner
 	producerInstance.KafkaConfig.Producer.RequiredAcks = sarama.WaitForAll
 	producerInstance.KafkaConfig.Producer.Return.Successes = true
+	if config.ProducerConfig.MessagesSecond != 0 {
+		flushFrequency := time.Duration(1/config.ProducerConfig.MessagesSecond*1000) * time.Millisecond
+		producerInstance.KafkaConfig.Producer.Flush.Frequency = flushFrequency
+		producerInstance.KafkaConfig.Producer.Flush.MaxMessages = 1
+	}
 
 	if config.Tls.Enabled == true {
 		tlsConfig, err := common.NewTLSConfig(config.Tls.ClientCert,
@@ -83,7 +89,7 @@ func (k *producer) sendMessage(msg *sarama.ProducerMessage) error {
 		return err
 	} else {
 		metrics.TotalMessageSend.WithLabelValues(k.BootstrapServer, k.Topic).Inc()
-		logrus.Debug("Message was saved to partion: " + strconv.Itoa(int(partition)) + ". Message offset is: " + strconv.Itoa(int(offset)))
+		logrus.Info("Message was saved to partion: " + strconv.Itoa(int(partition)) + ". Message offset is: " + strconv.Itoa(int(offset)))
 		return nil
 	}
 }

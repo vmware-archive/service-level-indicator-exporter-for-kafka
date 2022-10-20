@@ -36,5 +36,8 @@ func startProducer(cmd *cobra.Command, args []string) {
 
 	}
 	http.Handle("/metrics", promhttp.Handler())
-	http.ListenAndServe(cfg.Prometheus.PrometheusServer+":"+cfg.Prometheus.PrometheusPort, nil)
+	err := http.ListenAndServe(cfg.Prometheus.PrometheusServer+":"+cfg.Prometheus.PrometheusPort, nil)
+	if err != nil {
+		logrus.Error("Error creating prometheus server: " + cfg.Prometheus.PrometheusServer + ":" + cfg.Prometheus.PrometheusPort + err.Error())
+	}
 }

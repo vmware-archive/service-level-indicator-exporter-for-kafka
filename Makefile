@@ -28,8 +28,12 @@ fmt: ## Run go fmt against code.
 	go fmt ./...
 
 .PHONY: test
-fmt: ## Run go fmt against code.
-	go test ./...
+test: ## Run go test against code.
+	go test ./... -count=1 -v
+
+.PHONY: test-ci
+test-ci: ## Run go test against code.
+	go test --tags=ci ./... -count=1 -v
 
 .PHONY: vet
 vet: ## Run go vet against code.
@@ -39,14 +43,22 @@ vet: ## Run go vet against code.
 tidy: ## Run go mod tidy
 	go mod tidy
 
+.PHONY: vendor
+vendor: go.mod go.sum
+	go mod vendor
+
 ##@ Build
 
 .PHONY: build
 build: tidy fmt vet  ## Build manager binary.
 	go build -o bin/vdp-kafka-monitoring
 
-.PHONY: run
-run: fmt vet
+.PHONY: run-consumer
+run-consumer: fmt vet
+	go run main.go consumer
+
+.PHONY: run-producer
+run-producer: fmt vet
 	go run main.go producer
 
 .PHONY: build-image
@@ -57,6 +69,21 @@ build-image: vendor ## Build docker image with the manager.
 push-image: build-image ## Push docker image with the manager.
 	docker push ${IMG}:${TAG}
 
+.PHONY: start-environ
+start-environ:
+	 docker-compose -f compose.yaml up
 
-vendor: go.mod go.sum
-	go mod vendor
+.PHONY: kind-test
+kind-test:
+	vdpctl kind::create::gitlab
+	docker pull vmwaresaas.jfrog.io/vdp/source/confluentinc/cp-kafka:7.0.1
+	docker pull vmwaresaas.jfrog.io/vdp/source/confluentinc/cp-zookeeper:7.0.1
+	kind load docker-image --name vdp-$(hostname | md5sum | cut -c1-6) vmwaresaas.jfrog.io/vdp/source/confluentinc/cp-kafka:7.0.1
+	kind load docker-image --name vdp-$(hostname | md5sum | cut -c1-6) vmwaresaas.jfrog.io/vdp/source/confluentinc/cp-zookeeper:7.0.1
+	kubectl apply -f resources/kafka-slim.yaml
+	echo "Sleeping 60 seconds to start environ for e2e tests"
+	sleep 60
+	kubectl describe po kafka-0
+	kubectl port-forward kafka-0 9092:9092 &
+	make test-ci
+	vdpctl kind::delete::gitlab
