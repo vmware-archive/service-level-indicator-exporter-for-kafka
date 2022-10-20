@@ -17,6 +17,11 @@ type KafkaConfig struct {
 	BootstrapServer string
 	Topic           string
 	Tls             TlsConfig
+	ProducerConfig  ProducerConfig
+}
+
+type ProducerConfig struct {
+	MessagesSecond int32
 }
 
 type TlsConfig struct {

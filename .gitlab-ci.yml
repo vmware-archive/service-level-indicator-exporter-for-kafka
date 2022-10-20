@@ -53,7 +53,21 @@ test:
     - merge_requests
   interruptible: true
   script:
-  - make test
+    - vdpctl kind::create::gitlab
+    - gl_name="$(hostname | md5sum | cut -c1-6)"
+    - docker pull vmwaresaas.jfrog.io/vdp/source/confluentinc/cp-kafka:7.0.1
+    - docker pull vmwaresaas.jfrog.io/vdp/source/confluentinc/cp-zookeeper:7.0.1
+    - kind load docker-image --name vdp-${gl_name} vmwaresaas.jfrog.io/vdp/source/confluentinc/cp-kafka:7.0.1
+    - kind load docker-image --name vdp-${gl_name} vmwaresaas.jfrog.io/vdp/source/confluentinc/cp-zookeeper:7.0.1
+    - kubectl apply -f resources/kafka-slim.yaml
+    - echo "Sleeping 60 seconds to start environ for e2e tests"
+    - sleep 60
+    - kubectl describe po kafka-0
+    - kubectl port-forward kafka-0 9092:9092 &
+    - make test-ci
+    - vdpctl kind::delete::gitlab
+  after_script:
+  - vdpctl kind::delete::gitlab
 
 build:
   stage: build

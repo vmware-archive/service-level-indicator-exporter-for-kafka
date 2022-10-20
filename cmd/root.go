@@ -61,7 +61,7 @@ func initCommand() {
 	}
 	// set global log level
 	logrus.SetLevel(ll)
-	metrics.InitMetrics(config.Instance)
+	metrics.InitMetrics(config.Instance.Kafka)
 }
 func createConfig() {
 
