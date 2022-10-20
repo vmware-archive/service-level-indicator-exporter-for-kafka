@@ -11,10 +11,5 @@ kafka:
       clusterCert: resources/ca.crt
       clientCert: resources/user.crt
       clientKey: resources/user.key
-  #- bootstrapServer: kafka-bootstrap-csp-strimzi-cluster-us-east-1.vdp-int-dev.vmware.com:443
-  #  topic: kafka-monitoring
-  #  tls:
-  #    enabled: true
-  #    clusterCert: resources/ca.crt
-  #    clientCert: resources/user.crt
-  #    clientKey: resources/user.key
+    producerConfig:
+     messagesSecond: 2

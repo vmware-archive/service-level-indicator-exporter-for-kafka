@@ -45,9 +45,10 @@ var TotalMessageRead = prometheus.NewCounterVec(
 	[]string{"cluster", "topic"},
 )
 
-func InitMetrics(cfg *config.Config) {
-	for _, cluster := range cfg.Kafka {
+func InitMetrics(cfg []config.KafkaConfig) {
+	for _, cluster := range cfg {
 		prometheus.Register(TotalMessageSend.WithLabelValues(cluster.BootstrapServer, cluster.Topic))
+		prometheus.Register(TotalMessageRead.WithLabelValues(cluster.BootstrapServer, cluster.Topic))
 		prometheus.Register(ClusterUp.WithLabelValues(cluster.BootstrapServer))
 		prometheus.Register(ErrorTotalMessageSend.WithLabelValues(cluster.BootstrapServer, cluster.Topic))
 		prometheus.Register(MessageSendDuration)
