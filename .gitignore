@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-# Ignore everything in this directory
-*
-# Except this file
-!.gitignore
-=======
 #vdpctl ignores
 .vdpctl.sh
 .vdpctl_history
@@ -92,4 +86,5 @@ CI_RELEASE
 .gitsecret
 .vscode
 **/rendered_apps.yaml
->>>>>>> c02b3b0 ([lighthouse] add initial .gitignore)
+bin/**
+vendor/**

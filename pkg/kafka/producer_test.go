@@ -53,7 +53,7 @@ func TestProducer(t *testing.T) {
 			},
 			expectErr:                     false,
 			expectedTotalMessageSend:      1,
-			expectedErrorTotalMessageSend: 1,
+			expectedErrorTotalMessageSend: 0,
 		},
 	}
 	for _, config := range configs {
@@ -72,6 +72,7 @@ func TestProducer(t *testing.T) {
 
 		assert.Equal(config.expectedTotalMessageSend, testutil.ToFloat64(metrics.TotalMessageSend.WithLabelValues(config.kafkaConfig.BootstrapServer, config.kafkaConfig.Topic)))
 		assert.Equal(config.expectedErrorTotalMessageSend, testutil.ToFloat64(metrics.ErrorTotalMessageSend.WithLabelValues(config.kafkaConfig.BootstrapServer, config.kafkaConfig.Topic)))
+
 	}
 	destroyKafka(kafka)
 }
