@@ -1,4 +1,90 @@
-# Ignore everything in this directory
-*
-# Except this file
-!.gitignore
+#vdpctl ignores
+.vdpctl.sh
+.vdpctl_history
+.vdpctl_repos
+vdpctl/bin/darwin
+vdpctl/bin/linux
+
+#terraform/terragrunt ignores
+**/.terraform
+**/.terragrunt-cache
+**/terraform.tfstate
+**/*.tfstate.backup
+**/*(venv)
+*.tfstate.lock.info
+*.tfstate
+cicd/lighthouse/tf/.terraform.lock.hcl
+
+# IDE ignores
+**/.idea
+**/*.bak
+.vscode/*
+*.iml
+.DS*
+**/.DS_Store
+.idea/
+
+# Python3 Ignores
+**/venv
+**/__pycache__
+**/.config
+**/.cache
+**/dist
+**/*.pyc
+**/*(venv)
+.python-version
+**/.pytest_cache
+
+# dev-platform sub repo excludes
+repos
+scripts/config
+scripts/spec
+scripts/config-gitlab
+image-signing/**
+secrets/
+spec/
+dev-secrets/
+
+# Docs
+/docs/dev-platform/public/
+/docs/dev-platform/resources/_gen/
+/docs/dev-platform/output/
+/docs/tenant-docs/public/
+/docs/tenant-docs/resources/_gen/
+/docs/tenant-docs/output/
+
+
+# Other ignores
+.swp
+_tfw_*
+cli/csp-cli*
+*.backup
+*.retry
+services/namespaces/namespaces
+services/cluster-registry/cluster-registry
+services/projects/projects
+helm/*/*.tgz
+.tmp/
+.history/
+godepgraph.png
+.classpath
+.project
+.settings
+scripts/jobs_ids_mapping*
+scripts/config-commercial
+.rundeck_list
+.rundeck_fed_list
+**/.jedi_shipper
+.local_config
+**/ENV_STATE
+**/NEXT_ENV_TAG
+**/aws.config
+**/aws.config-raw
+**/aws-config-override.json
+**/.hugo_build.lock
+CI_RELEASE
+.gitsecret
+.vscode
+**/rendered_apps.yaml
+bin/**
+vendor/**
