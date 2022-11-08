@@ -43,6 +43,5 @@ func InitMetrics(cfg *config.Config) {
 		prometheus.Register(ErrorClusterMessageSend.WithLabelValues(cluster.BootstrapServer))
 		prometheus.Register(ErrorTotalMessageSend.WithLabelValues(cluster.BootstrapServer, cluster.Topic))
 		prometheus.Register(MessageSendDuration)
-
 	}
 }
