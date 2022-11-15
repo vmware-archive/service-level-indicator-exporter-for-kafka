@@ -10,26 +10,26 @@ import (
 	"github.com/vmware/service-level-indicator-exporter-for-kafka/pkg/kafka"
 )
 
-var producerCmd = &cobra.Command{
-	Use:     "producer",
+var consumerCmd = &cobra.Command{
+	Use:     "consumer",
 	Aliases: []string{"prod"},
-	Short:   "producer",
-	Run:     startProducer,
+	Short:   "consumer",
+	Run:     startConsumer,
 }
 
 func init() {
-	rootCmd.AddCommand(producerCmd)
+	rootCmd.AddCommand(consumerCmd)
 }
 
-func startProducer(cmd *cobra.Command, args []string) {
+func startConsumer(cmd *cobra.Command, args []string) {
 
 	cfg := config.Instance
-	logrus.Info("Starting producers.....")
+	logrus.Info("Starting consumer.....")
 	for _, cluster := range cfg.Kafka {
 
-		kafkaClusterMonitoring, err := kafka.NewProducer(cluster)
+		kafkaClusterMonitoring, err := kafka.NewConsumer(cluster)
 		if err != nil {
-			logrus.Error("Error creating kafka producer: " + cluster.BootstrapServer)
+			logrus.Error("Error creating kafka consumer: " + cluster.BootstrapServer)
 		} else {
 			go kafkaClusterMonitoring.Start()
 		}

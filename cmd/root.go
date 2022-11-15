@@ -7,8 +7,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"gitlab.eng.vmware.com/vdp/vdp-kafka-monitoring/config"
-	"gitlab.eng.vmware.com/vdp/vdp-kafka-monitoring/pkg/metrics"
+	"github.com/vmware/service-level-indicator-exporter-for-kafka/config"
+	"github.com/vmware/service-level-indicator-exporter-for-kafka/pkg/metrics"
 )
 
 var version = "0.0.1"

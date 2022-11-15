@@ -2,7 +2,7 @@ package metrics
 
 import (
 	"github.com/prometheus/client_golang/prometheus"
-	"gitlab.eng.vmware.com/vdp/vdp-kafka-monitoring/config"
+	"github.com/vmware/service-level-indicator-exporter-for-kafka/config"
 )
 
 var TotalMessageSend = prometheus.NewCounterVec(
@@ -45,12 +45,21 @@ var TotalMessageRead = prometheus.NewCounterVec(
 	[]string{"cluster", "topic"},
 )
 
+var ErrorInRead = prometheus.NewCounterVec(
+	prometheus.CounterOpts{
+		Name: "kafka_monitoring_error_in_read",
+		Help: "Errors in kafka consumer",
+	},
+	[]string{"cluster", "topic"},
+)
+
 func InitMetrics(cfg []config.KafkaConfig) {
 	for _, cluster := range cfg {
 		prometheus.Register(TotalMessageSend.WithLabelValues(cluster.BootstrapServer, cluster.Topic))
 		prometheus.Register(TotalMessageRead.WithLabelValues(cluster.BootstrapServer, cluster.Topic))
 		prometheus.Register(ClusterUp.WithLabelValues(cluster.BootstrapServer))
 		prometheus.Register(ErrorTotalMessageSend.WithLabelValues(cluster.BootstrapServer, cluster.Topic))
+		prometheus.Register(ErrorInRead.WithLabelValues(cluster.BootstrapServer, cluster.Topic))
 		prometheus.Register(MessageSendDuration)
 	}
 }

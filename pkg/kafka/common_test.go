@@ -3,20 +3,19 @@ package kafka
 import (
 	"fmt"
 	"strings"
+	"testing"
 	"time"
 
 	"github.com/google/uuid"
 	testcontainers "github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
-	msConfig "gitlab.eng.vmware.com/vdp/vdp-kafka-monitoring/config"
 )
 
-type testConfig struct {
-	kafkaConfig                   msConfig.KafkaConfig
-	expectErr                     bool
-	expectedTotalMessageSend      float64
-	expectedErrorTotalMessageSend float64
-	expectedClusterUp             float64
+func TestE2E(t *testing.T) {
+	kafka := startEnviron()
+	defer destroyKafka(kafka)
+	testProducer(t)
+	testConsumer(t)
 }
 
 func startEnviron() *testcontainers.LocalDockerCompose {

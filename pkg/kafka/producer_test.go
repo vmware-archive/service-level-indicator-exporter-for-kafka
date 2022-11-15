@@ -9,14 +9,20 @@ import (
 	"github.com/Shopify/sarama"
 	"github.com/prometheus/client_golang/prometheus/testutil"
 	"github.com/stretchr/testify/assert"
-	msConfig "gitlab.eng.vmware.com/vdp/vdp-kafka-monitoring/config"
-	"gitlab.eng.vmware.com/vdp/vdp-kafka-monitoring/pkg/metrics"
+	msConfig "github.com/vmware/service-level-indicator-exporter-for-kafka/config"
+	"github.com/vmware/service-level-indicator-exporter-for-kafka/pkg/metrics"
 )
 
-func TestProducer(t *testing.T) {
-	kafka := startEnviron()
+type testConfig struct {
+	kafkaConfig                   msConfig.KafkaConfig
+	expectErr                     bool
+	expectedTotalMessageSend      float64
+	expectedErrorTotalMessageSend float64
+	expectedClusterUp             float64
+}
+
+func testProducer(t *testing.T) {
 	assert := assert.New(t)
-	defer destroyKafka(kafka)
 	configs := []testConfig{
 		{
 			kafkaConfig: msConfig.KafkaConfig{
