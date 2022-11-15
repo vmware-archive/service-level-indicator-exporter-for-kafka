@@ -1,7 +1,7 @@
 package main
 
 import (
-	"gitlab.eng.vmware.com/vdp/vdp-kafka-monitoring/cmd"
+	"github.com/vmware/service-level-indicator-exporter-for-kafka/cmd"
 )
 
 func main() {
