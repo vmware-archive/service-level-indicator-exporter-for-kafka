@@ -29,7 +29,7 @@ Nevertheless, you can build the service and run the binary. Next command will ge
 | kafka_monitoring_error_total_messages_send | Counter | Cluster, Topic | Total messages with errors send by the kafka monitoring services |
 | kafka_monitoring_message_send_duration | Summary | Cluster, Topic | Latency for kafka producer message send |
 
-## Example dashboards
+## Example dashboards
 
 We provide couple of dashboard as an example for the main monitoring system like grafana or wavefront.
 
