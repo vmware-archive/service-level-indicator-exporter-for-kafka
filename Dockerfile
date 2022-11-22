@@ -1,5 +1,9 @@
 # Build the manager binary
-FROM vmwaresaas.jfrog.io/vdp/go-dev:latest-1.18 as builder
+FROM golang:1.18.6 as builder
+
+ARG BUILDARCH
+ARG CGO_ENABLED
+ARG GO_LDFLAGS
 
 WORKDIR /workspace
 # Copy the Go Modules manifests
@@ -17,7 +21,7 @@ COPY pkg/ pkg/
 COPY vendor/ vendor/
 
 # Build
-RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 && go build -ldflags "-w -linkmode=external -extldflags=-static" -a -o vdp-kafka-monitoring && copy-links vdp-kafka-monitoring
+RUN CGO_ENABLED=$CGO_ENABLED GOOS=linux GOARCH=$BUILDARCH && go build -ldflags $GO_LDFLAGS -a -o kafka-slo-monitoring 
 RUN echo 'nonroot:x:1000:2000::/home/nonroot:/dev/null' > /tmp/passwd
 
 # Use distroless as minimal base image to package the manager binary
@@ -25,8 +29,8 @@ RUN echo 'nonroot:x:1000:2000::/home/nonroot:/dev/null' > /tmp/passwd
 FROM scratch
 WORKDIR /
 COPY --from=builder /tmp/passwd /etc/passwd
-COPY --from=builder /workspace/vdp-kafka-monitoring /vdp-kafka-monitoring
+COPY --from=builder /workspace/kafka-slo-monitoring /kafka-slo-monitoring
 COPY --from=builder /workspace/config.yaml /config.yaml
 
 
-ENTRYPOINT ["/vdp-kafka-monitoring","producer"]
+ENTRYPOINT ["/kafka-slo-monitoring","producer"]

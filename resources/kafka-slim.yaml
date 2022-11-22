@@ -17,7 +17,7 @@ spec:
       enableServiceLinks: false
       containers:
       - name: kafka
-        image: vmwaresaas.jfrog.io/vdp/source/confluentinc/cp-kafka:7.0.1
+        image: confluentinc/cp-kafka:7.0.1
         ports:
         - containerPort: 9092
         env:
@@ -55,7 +55,7 @@ spec:
     spec:
       containers:
       - name: broker
-        image: vmwaresaas.jfrog.io/vdp/source/confluentinc/cp-zookeeper:7.0.1
+        image: confluentinc/cp-zookeeper:7.0.1
         ports:
         - containerPort: 2181
         env:

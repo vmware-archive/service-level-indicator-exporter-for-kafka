@@ -1,6 +1,8 @@
 # Image URL to use all building/pushing image targets
 TAG ?= latest
-IMG ?= vmwaresaas.jfrog.io/vdp/source/vdp-kafka-monitoring
+IMG ?= vmware/kafka-slo-monitoring
+
+FIPSMODE ?= FALSE
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
@@ -17,11 +19,17 @@ ifdef CI_JOB_TOKEN
 else
 	GITLAB_TOKEN := $(shell vdpctl git::gitlab-token)
 endif
+
 DOCKER_BUILD_ARGS := --build-arg GITLAB_TOKEN=$(GITLAB_TOKEN)
 
 DEV_ENV_WORK_DIR := /go/src/${PKG}
 CURRENT_DIR=$(shell pwd)
 PROJECT_DIR := $(shell dirname $(abspath $(firstword $(MAKEFILE_LIST))))
+
+CGO_ENABLED ?= 0
+EXTRA_GO_LDFLAGS ?= ""
+BUILDARCH ?= amd64
+GO_LDFLAGS := -s -w $(EXTRA_GO_LDFLAGS)
 
 .PHONY: fmt
 fmt: ## Run go fmt against code.
@@ -51,7 +59,7 @@ vendor: go.mod go.sum
 
 .PHONY: build
 build: tidy fmt vet  ## Build manager binary.
-	go build -o bin/vdp-kafka-monitoring
+	go build -o bin/kafka-slo-monitoring 
 
 .PHONY: run-consumer
 run-consumer: fmt vet
@@ -76,10 +84,10 @@ start-environ:
 .PHONY: kind-test
 kind-test:
 	vdpctl kind::create::gitlab
-	docker pull vmwaresaas.jfrog.io/vdp/source/confluentinc/cp-kafka:7.0.1
-	docker pull vmwaresaas.jfrog.io/vdp/source/confluentinc/cp-zookeeper:7.0.1
-	kind load docker-image --name vdp-$(hostname | md5sum | cut -c1-6) vmwaresaas.jfrog.io/vdp/source/confluentinc/cp-kafka:7.0.1
-	kind load docker-image --name vdp-$(hostname | md5sum | cut -c1-6) vmwaresaas.jfrog.io/vdp/source/confluentinc/cp-zookeeper:7.0.1
+	docker pull confluentinc/cp-kafka:7.0.1
+	docker pull confluentinc/cp-zookeeper:7.0.1
+	kind load docker-image --name vdp-$(hostname | md5sum | cut -c1-6) confluentinc/cp-kafka:7.0.1
+	kind load docker-image --name vdp-$(hostname | md5sum | cut -c1-6) confluentinc/cp-zookeeper:7.0.1
 	kubectl apply -f resources/kafka-slim.yaml
 	echo "Sleeping 60 seconds to start environ for e2e tests"
 	sleep 60
