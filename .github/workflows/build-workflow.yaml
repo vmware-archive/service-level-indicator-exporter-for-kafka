@@ -1,0 +1,21 @@
+name: build-workflow
+# This workflow is triggered on pushes to the repository.
+on: 
+  pull_request:
+
+jobs:
+  build:
+    name: build-job
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: engineerd/setup-kind@v0.5.0
+        with:
+          version: "v0.9.0"
+      - uses: FranzDiebold/github-env-vars-action@v1.2.1
+      - name: test
+        run: |
+          make test
+      - name: build-image
+        run: |
+          make build-image TAG=v$GITHUB_SHA_SHORT
