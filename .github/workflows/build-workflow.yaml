@@ -1,8 +1,10 @@
 name: build-workflow
 # This workflow is triggered on pushes to the repository.
-on: 
+on:
+  push:
+    branches:
+      - "main"
   pull_request:
-
 jobs:
   build:
     name: build-job
