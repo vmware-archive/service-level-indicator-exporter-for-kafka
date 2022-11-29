@@ -80,18 +80,3 @@ push-image: build-image ## Push docker image with the manager.
 .PHONY: start-environ
 start-environ:
 	 docker-compose -f compose.yaml up
-
-.PHONY: kind-test
-kind-test:
-	vdpctl kind::create::gitlab
-	docker pull confluentinc/cp-kafka:7.0.1
-	docker pull confluentinc/cp-zookeeper:7.0.1
-	kind load docker-image --name vdp-$(hostname | md5sum | cut -c1-6) confluentinc/cp-kafka:7.0.1
-	kind load docker-image --name vdp-$(hostname | md5sum | cut -c1-6) confluentinc/cp-zookeeper:7.0.1
-	kubectl apply -f resources/kafka-slim.yaml
-	echo "Sleeping 60 seconds to start environ for e2e tests"
-	sleep 60
-	kubectl describe po kafka-0
-	kubectl port-forward kafka-0 9092:9092 &
-	make test-ci
-	vdpctl kind::delete::gitlab
