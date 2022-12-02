@@ -33,4 +33,4 @@ COPY --from=builder /workspace/kafka-slo-monitoring /kafka-slo-monitoring
 COPY --from=builder /workspace/config.yaml /config.yaml
 
 
-ENTRYPOINT ["/kafka-slo-monitoring","producer"]
+ENTRYPOINT ["/kafka-slo-monitoring","app"]

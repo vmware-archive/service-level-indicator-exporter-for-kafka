@@ -38,7 +38,7 @@ func NewProducer(config config.KafkaConfig) (Producer KafkaProducer, err error) 
 	producerInstance.KafkaConfig.Producer.RequiredAcks = sarama.WaitForAll
 	producerInstance.KafkaConfig.Producer.Return.Successes = true
 	if config.ProducerConfig.MessagesSecond != 0 {
-		flushFrequency := time.Duration(1/config.ProducerConfig.MessagesSecond*1000) * time.Millisecond
+		flushFrequency := time.Duration(1000/config.ProducerConfig.MessagesSecond) * time.Millisecond
 		producerInstance.KafkaConfig.Producer.Flush.Frequency = flushFrequency
 		producerInstance.KafkaConfig.Producer.Flush.MaxMessages = 1
 	}

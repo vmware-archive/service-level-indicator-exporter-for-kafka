@@ -10,11 +10,18 @@ The repo provide a makefile with some useful instruccion. You can start a kafka 
     make start-environ
 ```
 ### Run kafka monitoring instance
-Once you have the kafka cluster up and running you can start your kafka-monitoring instance and take a look on the metrics.
+Once you have the kafka cluster up and running you can start your kafka-monitoring instance and take a look on the metrics. We have 3 modes of running: 
+- Producer: Running a kafka synchronous producer client
+- Consumer: Running a kafka consumer group
+- Both client. Running a producer and consumer in same app. Running producer and consumer in the same pod is not the preferred approach for many requests. Use it at your own risk.
+
+You can run each one using the next commands:
 ```bash
     make run-producer
+    make run-consumer
+    make run-app
 ```
-Nevertheless, you can build the service and run the binary. Next command will generate a binary in `bin/vdp-kafka-monitoring` who you can run locally.
+Nevertheless, you can build the service and run the binary. Next command will generate a binary in `bin/kafka-slo-monitoring` who you can run locally.
 ```bash
     make run-binary
 ```
