@@ -13,10 +13,10 @@ import (
 
 var version = "0.0.1"
 var rootCmd = &cobra.Command{
-	Use:     "vdp-kafka-monitoring",
+	Use:     "kafka-slo-monitoring",
 	Version: version,
-	Short:   "vdp-kafka-monitoring - a simple CLI to monitor kafka clusters",
-	Long: `vdp-kafka-monitoring is a CLI to monitoring kafka cluster. Adding the config we will send
+	Short:   "kafka-slo-monitoring - a simple CLI to monitor kafka clusters",
+	Long: `kafka-slo-monitoring is a CLI to monitoring kafka cluster. Adding the config we will send
 	a notification for every kafka cluster`,
 	Run: func(cmd *cobra.Command, args []string) {
 

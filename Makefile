@@ -69,6 +69,10 @@ run-consumer: fmt vet
 run-producer: fmt vet
 	go run main.go producer
 
+.PHONY: run-app
+run-app: fmt vet
+	go run main.go app
+
 .PHONY: build-image
 build-image: vendor ## Build docker image with the manager.
 	docker build -t ${IMG}:${TAG} $(DOCKER_BUILD_ARGS) .
