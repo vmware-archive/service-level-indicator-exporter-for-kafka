@@ -32,5 +32,6 @@ COPY --from=builder /tmp/passwd /etc/passwd
 COPY --from=builder /workspace/kafka-slo-monitoring /kafka-slo-monitoring
 COPY --from=builder /workspace/config.yaml /config.yaml
 
+USER 1000
 
 ENTRYPOINT ["/kafka-slo-monitoring","producer"]
