@@ -7,7 +7,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	testcontainers "github.com/testcontainers/testcontainers-go"
+	tc "github.com/testcontainers/testcontainers-go/modules/compose"
+
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
@@ -18,9 +19,9 @@ func TestE2E(t *testing.T) {
 	testConsumer(t)
 }
 
-func startEnviron() *testcontainers.LocalDockerCompose {
+func startEnviron() *tc.LocalDockerCompose {
 	//given
-	kafka := testcontainers.NewLocalDockerCompose(
+	kafka := tc.NewLocalDockerCompose(
 		[]string{"../../compose.yaml"},
 		strings.ToLower(uuid.New().String()),
 	)
@@ -36,7 +37,7 @@ func startEnviron() *testcontainers.LocalDockerCompose {
 	}
 
 }
-func destroyKafka(compose *testcontainers.LocalDockerCompose) {
+func destroyKafka(compose *tc.LocalDockerCompose) {
 	compose.Down()
 	time.Sleep(3 * time.Second)
 }
