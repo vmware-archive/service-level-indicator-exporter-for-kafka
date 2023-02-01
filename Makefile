@@ -1,6 +1,6 @@
 # Image URL to use all building/pushing image targets
 TAG ?= latest
-IMG ?= vmware/kafka-slo-monitoring
+IMG ?= vmware/kafka-slo-exporter
 
 FIPSMODE ?= FALSE
 
@@ -80,6 +80,7 @@ build-image: vendor ## Build docker image with the manager.
 .PHONY: push-image
 push-image: build-image ## Push docker image with the manager.
 	docker push ${IMG}:${TAG}
+	docker push ${IMG}:latest
 
 .PHONY: start-environ
 start-environ:
