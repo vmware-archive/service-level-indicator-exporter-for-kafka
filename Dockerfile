@@ -21,17 +21,15 @@ COPY pkg/ pkg/
 COPY vendor/ vendor/
 
 # Build
-RUN CGO_ENABLED=$CGO_ENABLED GOOS=linux GOARCH=$BUILDARCH && go build -ldflags $GO_LDFLAGS -a -o kafka-slo-monitoring 
+RUN CGO_ENABLED=0 && go build -installsuffix 'static' -o kafka-slo-monitoring
 RUN echo 'nonroot:x:1000:2000::/home/nonroot:/dev/null' > /tmp/passwd
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
-FROM scratch
+FROM golang:1.18.6
 WORKDIR /
 COPY --from=builder /tmp/passwd /etc/passwd
 COPY --from=builder /workspace/kafka-slo-monitoring /kafka-slo-monitoring
 COPY --from=builder /workspace/config.yaml /config.yaml
-
-USER 1000
 
 ENTRYPOINT ["/kafka-slo-monitoring","app"]
