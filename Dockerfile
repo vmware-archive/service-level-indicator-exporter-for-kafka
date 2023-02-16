@@ -1,8 +1,7 @@
 # Build the manager binary
-FROM golang:1.18.6 as builder
+FROM golang:alpine as builder
 
 ARG BUILDARCH
-ARG CGO_ENABLED
 ARG GO_LDFLAGS
 
 WORKDIR /workspace
@@ -21,8 +20,8 @@ COPY pkg/ pkg/
 COPY vendor/ vendor/
 
 # Build
-RUN CGO_ENABLED=$CGO_ENABLED GOOS=linux GOARCH=$BUILDARCH && go build -ldflags $GO_LDFLAGS -a -o kafka-slo-monitoring 
-RUN echo 'nonroot:x:1000:2000::/home/nonroot:/dev/null' > /tmp/passwd
+RUN GOOS=linux GOARCH=$BUILDARCH && go build -ldflags $GO_LDFLAGS -a -o kafka-slo-monitoring 
+RUN echo 'nonroot:x:1000:2000::/home/nonroot' > /tmp/passwd
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
