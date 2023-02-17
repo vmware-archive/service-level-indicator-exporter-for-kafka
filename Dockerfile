@@ -1,5 +1,5 @@
 # Build the manager binary
-FROM golang:1.18.6 as builder
+FROM golang:alpine as builder
 
 ARG BUILDARCH
 ARG CGO_ENABLED

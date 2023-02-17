@@ -2,30 +2,6 @@
 TAG ?= latest
 IMG ?= vmware/kafka-slo-exporter
 
-FIPSMODE ?= FALSE
-
-# Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
-ifeq (,$(shell go env GOBIN))
-GOBIN=$(shell go env GOPATH)/bin
-else
-GOBIN=$(shell go env GOBIN)
-endif
-
-GOOS ?= $(shell go env GOOS)
-GOARCH ?= $(shell go env GOARCH)
-
-ifdef CI_JOB_TOKEN
-	GITLAB_TOKEN := $${CI_JOB_TOKEN}
-else
-	GITLAB_TOKEN := $(shell vdpctl git::gitlab-token)
-endif
-
-DOCKER_BUILD_ARGS := --build-arg GITLAB_TOKEN=$(GITLAB_TOKEN)
-
-DEV_ENV_WORK_DIR := /go/src/${PKG}
-CURRENT_DIR=$(shell pwd)
-PROJECT_DIR := $(shell dirname $(abspath $(firstword $(MAKEFILE_LIST))))
-
 CGO_ENABLED ?= 0
 EXTRA_GO_LDFLAGS ?= ""
 BUILDARCH ?= amd64
