@@ -85,3 +85,9 @@ push-image: build-image ## Push docker image with the manager.
 .PHONY: start-environ
 start-environ:
 	 docker-compose -f compose.yaml up
+
+.PHONY: godoc
+godoc: ## Use gomarkdoc to generate documentation for the whole project
+	gomarkdoc --output 'docs/{{.Dir}}/README.md' ./cmd/...
+	gomarkdoc --output 'docs/{{.Dir}}/README.md' ./config/...
+	gomarkdoc --output 'docs/{{.Dir}}/README.md' ./pkg/...
