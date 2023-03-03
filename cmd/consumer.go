@@ -21,6 +21,7 @@ func init() {
 	rootCmd.AddCommand(consumerCmd)
 }
 
+// startConsumer create a new consumer an prometheus server with metrics
 func startConsumer(cmd *cobra.Command, args []string) {
 
 	cfg := config.Instance

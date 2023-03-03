@@ -14,6 +14,8 @@ import "github.com/vmware/service-level-indicator-exporter-for-kafka/pkg/metrics
 
 ## Variables
 
+ClusterUp Producer will set up Gauge values to 0 if cluster is unreacheable or 1 if we are able to connect to kafka cluster
+
 ```go
 var ClusterUp = prometheus.NewGaugeVec(
     prometheus.GaugeOpts{
@@ -23,6 +25,8 @@ var ClusterUp = prometheus.NewGaugeVec(
     []string{"cluster"},
 )
 ```
+
+TotalMessageRead Consumer instance will increase counter if it is unable of read from kafka cluster
 
 ```go
 var ErrorInRead = prometheus.NewCounterVec(
@@ -34,6 +38,8 @@ var ErrorInRead = prometheus.NewCounterVec(
 )
 ```
 
+ErrorTotalMessageSend Producer instance will increase counter if we are not able of send a message per kafka cluster
+
 ```go
 var ErrorTotalMessageSend = prometheus.NewCounterVec(
     prometheus.CounterOpts{
@@ -43,6 +49,8 @@ var ErrorTotalMessageSend = prometheus.NewCounterVec(
     []string{"cluster", "topic"},
 )
 ```
+
+MessageSendDuration Producer summary with rate duration/reqs send
 
 ```go
 var MessageSendDuration = prometheus.NewSummaryVec(
@@ -54,6 +62,8 @@ var MessageSendDuration = prometheus.NewSummaryVec(
 )
 ```
 
+TotalMessageRead Consumer instance will increase counter with total messages read per kafka cluster
+
 ```go
 var TotalMessageRead = prometheus.NewCounterVec(
     prometheus.CounterOpts{
@@ -63,6 +73,8 @@ var TotalMessageRead = prometheus.NewCounterVec(
     []string{"cluster", "topic"},
 )
 ```
+
+TotalMessageSend Producer instance will increase counter with total messages send per kafka cluster
 
 ```go
 var TotalMessageSend = prometheus.NewCounterVec(
@@ -79,6 +91,8 @@ var TotalMessageSend = prometheus.NewCounterVec(
 ```go
 func InitMetrics(cfg []config.KafkaConfig)
 ```
+
+InitMetrics function call when app start for register and init the metrics
 
 
 

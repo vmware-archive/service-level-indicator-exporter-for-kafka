@@ -14,11 +14,13 @@ import (
 	"github.com/vmware/service-level-indicator-exporter-for-kafka/pkg/common"
 )
 
+//KafkaProducer interface
 type KafkaProducer interface {
 	Start()
 	sendMessage(*sarama.ProducerMessage) error
 }
 
+//producer struct contains the kafkaProducer client and expose the config
 type producer struct {
 	Topic           string
 	BootstrapServer string
@@ -28,6 +30,8 @@ type producer struct {
 
 var producerInstance *producer
 
+// NewProducer return a new Synchronous KafkaProducer for one kafkaCluster. We will set up here the Producer req/s and kafka monitoring topics.
+// This producer is the most restricted producer available, because it is synchronous and wait for all ACKs
 func NewProducer(config config.KafkaConfig) (Producer KafkaProducer, err error) {
 
 	producerInstance := new(producer)
@@ -37,12 +41,15 @@ func NewProducer(config config.KafkaConfig) (Producer KafkaProducer, err error) 
 	producerInstance.KafkaConfig.Producer.Partitioner = sarama.NewRandomPartitioner
 	producerInstance.KafkaConfig.Producer.RequiredAcks = sarama.WaitForAll
 	producerInstance.KafkaConfig.Producer.Return.Successes = true
+
+	// Logic for configure req/s if MessagesSecond is set up. If not we will send as much as req/s that kafka cluster can handle.
 	if config.ProducerConfig.MessagesSecond != 0 {
 		flushFrequency := time.Duration(1000/config.ProducerConfig.MessagesSecond) * time.Millisecond
 		producerInstance.KafkaConfig.Producer.Flush.Frequency = flushFrequency
 		producerInstance.KafkaConfig.Producer.Flush.MaxMessages = 1
 	}
 
+	// Authenticate against kafka broker using TLS if required
 	if config.Tls.Enabled == true {
 		tlsConfig, err := common.NewTLSConfig(config.Tls.ClientCert,
 			config.Tls.ClientKey,
@@ -63,6 +70,7 @@ func NewProducer(config config.KafkaConfig) (Producer KafkaProducer, err error) 
 	return producerInstance, err
 }
 
+//Start function for run the synchronous producer
 func (k *producer) Start() {
 	for {
 		message := &sarama.ProducerMessage{
@@ -81,6 +89,7 @@ func (k *producer) Start() {
 	}
 }
 
+//sendMessage and increase prometheus metrics if success/fail
 func (k *producer) sendMessage(msg *sarama.ProducerMessage) error {
 	partition, offset, err := k.KafkaClient.SendMessage(msg)
 	if err != nil {
