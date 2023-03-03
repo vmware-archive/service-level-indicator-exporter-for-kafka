@@ -31,6 +31,8 @@ func NewConsumer(config config.KafkaConfig) (Consumer KafkaConsumer, err error)
 
 ## type KafkaProducer
 
+KafkaProducer interface
+
 ```go
 type KafkaProducer interface {
     Start()
@@ -43,6 +45,8 @@ type KafkaProducer interface {
 ```go
 func NewProducer(config config.KafkaConfig) (Producer KafkaProducer, err error)
 ```
+
+NewProducer return a new Synchronous KafkaProducer for one kafkaCluster. We will set up here the Producer req/s and kafka monitoring topics. This producer is the most restricted producer available, because it is synchronous and wait for all ACKs
 
 
 

@@ -5,6 +5,7 @@ import (
 	"github.com/vmware/service-level-indicator-exporter-for-kafka/config"
 )
 
+//TotalMessageSend Producer instance will increase counter with total messages send per kafka cluster
 var TotalMessageSend = prometheus.NewCounterVec(
 	prometheus.CounterOpts{
 		Name: "kafka_monitoring_total_messages_send",
@@ -13,6 +14,7 @@ var TotalMessageSend = prometheus.NewCounterVec(
 	[]string{"cluster", "topic"},
 )
 
+//ErrorTotalMessageSend Producer instance will increase counter if we are not able of send a message per kafka cluster
 var ErrorTotalMessageSend = prometheus.NewCounterVec(
 	prometheus.CounterOpts{
 		Name: "kafka_monitoring_error_total_messages_send",
@@ -21,6 +23,7 @@ var ErrorTotalMessageSend = prometheus.NewCounterVec(
 	[]string{"cluster", "topic"},
 )
 
+//ClusterUp Producer will set up Gauge values to 0 if cluster is unreacheable or 1 if we are able to connect to kafka cluster
 var ClusterUp = prometheus.NewGaugeVec(
 	prometheus.GaugeOpts{
 		Name: "kafka_monitoring_cluster_up",
@@ -29,6 +32,7 @@ var ClusterUp = prometheus.NewGaugeVec(
 	[]string{"cluster"},
 )
 
+//MessageSendDuration Producer summary with rate duration/reqs send
 var MessageSendDuration = prometheus.NewSummaryVec(
 	prometheus.SummaryOpts{
 		Name: "kafka_monitoring_message_send_duration",
@@ -37,6 +41,7 @@ var MessageSendDuration = prometheus.NewSummaryVec(
 	[]string{"cluster", "topic"},
 )
 
+//TotalMessageRead Consumer instance will increase counter with total messages read per kafka cluster
 var TotalMessageRead = prometheus.NewCounterVec(
 	prometheus.CounterOpts{
 		Name: "kafka_monitoring_total_messages_read",
@@ -45,6 +50,7 @@ var TotalMessageRead = prometheus.NewCounterVec(
 	[]string{"cluster", "topic"},
 )
 
+//TotalMessageRead Consumer instance will increase counter if it is unable of read from kafka cluster
 var ErrorInRead = prometheus.NewCounterVec(
 	prometheus.CounterOpts{
 		Name: "kafka_monitoring_error_in_read",
@@ -53,6 +59,7 @@ var ErrorInRead = prometheus.NewCounterVec(
 	[]string{"cluster", "topic"},
 )
 
+//InitMetrics function call when app start for register and init the metrics
 func InitMetrics(cfg []config.KafkaConfig) {
 	for _, cluster := range cfg {
 		prometheus.Register(TotalMessageSend.WithLabelValues(cluster.BootstrapServer, cluster.Topic))

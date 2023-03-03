@@ -21,6 +21,7 @@ func init() {
 	rootCmd.AddCommand(producerCmd)
 }
 
+// startProducer create a new kafka producer an prometheus server with metrics
 func startProducer(cmd *cobra.Command, args []string) {
 
 	cfg := config.Instance
