@@ -70,3 +70,13 @@ func InitMetrics(cfg []config.KafkaConfig) {
 		prometheus.Register(MessageSendDuration)
 	}
 }
+
+func ResetMetrics(cfg []config.KafkaConfig) {
+	for _, cluster := range cfg {
+		TotalMessageSend.DeleteLabelValues(cluster.BootstrapServer, cluster.Topic)
+		TotalMessageRead.DeleteLabelValues(cluster.BootstrapServer, cluster.Topic)
+		ClusterUp.DeleteLabelValues(cluster.BootstrapServer)
+		ErrorTotalMessageSend.DeleteLabelValues(cluster.BootstrapServer, cluster.Topic)
+		ErrorInRead.DeleteLabelValues(cluster.BootstrapServer, cluster.Topic)
+	}
+}

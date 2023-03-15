@@ -42,8 +42,12 @@ func NewConsumer(config config.KafkaConfig) (Consumer KafkaConsumer, err error) 
 	consumerInstance.Topic = config.Topic
 	consumerInstance.BootstrapServer = config.BootstrapServer
 	consumerInstance.KafkaConfig = sarama.NewConfig()
+	consumerInstance.KafkaConfig.Consumer.Return.Errors = true
+	if config.ConsumerConfig.FromBeginning {
+		consumerInstance.KafkaConfig.Consumer.Offsets.Initial = sarama.OffsetOldest
+	}
 	consumerInstance.Ctx, consumerInstance.Cancel = context.WithCancel(context.Background())
-	if config.Tls.Enabled == true {
+	if config.Tls.Enabled {
 		tlsConfig, err := common.NewTLSConfig(config.Tls.ClientCert,
 			config.Tls.ClientKey,
 			config.Tls.ClusterCert)
@@ -80,9 +84,11 @@ func (k *consumer) Start() {
 			if err := k.KafkaClient.Consume(k.Ctx, strings.Split(k.Topic, ","), k); err != nil {
 				logrus.Error("Error from consumer: " + err.Error())
 				metrics.ErrorInRead.WithLabelValues(k.BootstrapServer, k.Topic).Inc()
+				return
 			}
 			// check if context was cancelled, signaling that the consumer should stop
 			if k.Ctx.Err() != nil {
+				logrus.Error("Closing consumer because of context: " + k.Ctx.Err().Error())
 				return
 			}
 			k.ready = make(chan bool)
