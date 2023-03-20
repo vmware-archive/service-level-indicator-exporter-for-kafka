@@ -10,6 +10,7 @@ import "github.com/vmware/service-level-indicator-exporter-for-kafka/pkg/metrics
 
 - [Variables](<#variables>)
 - [func InitMetrics(cfg []config.KafkaConfig)](<#func-initmetrics>)
+- [func ResetMetrics(cfg []config.KafkaConfig)](<#func-resetmetrics>)
 
 
 ## Variables
@@ -93,6 +94,12 @@ func InitMetrics(cfg []config.KafkaConfig)
 ```
 
 InitMetrics function call when app start for register and init the metrics
+
+## func ResetMetrics
+
+```go
+func ResetMetrics(cfg []config.KafkaConfig)
+```
 
 
 

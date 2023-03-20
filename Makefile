@@ -13,11 +13,15 @@ fmt: ## Run go fmt against code.
 
 .PHONY: test
 test: ## Run go test against code.
-	go test ./... -count=1 -v
+	go test ./... -timeout 300s -count=1 -v
 
 .PHONY: test-ci
 test-ci: ## Run go test against code.
 	go test --tags=ci ./... -count=1 -v
+
+.PHONY: teste2e
+teste2e: ## Run go test against code.
+	go test ./e2e/tests -timeout 300s -count=1 -v
 
 .PHONY: vet
 vet: ## Run go vet against code.

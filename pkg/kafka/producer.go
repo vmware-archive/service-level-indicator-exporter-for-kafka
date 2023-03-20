@@ -17,7 +17,8 @@ import (
 //KafkaProducer interface
 type KafkaProducer interface {
 	Start()
-	sendMessage(*sarama.ProducerMessage) error
+	Stop()
+	SendMessage(*sarama.ProducerMessage) error
 }
 
 //producer struct contains the kafkaProducer client and expose the config
@@ -26,6 +27,7 @@ type producer struct {
 	BootstrapServer string
 	KafkaConfig     *sarama.Config
 	KafkaClient     sarama.SyncProducer
+	stopchan        chan bool
 }
 
 var producerInstance *producer
@@ -38,6 +40,9 @@ func NewProducer(config config.KafkaConfig) (Producer KafkaProducer, err error) 
 	producerInstance.Topic = config.Topic
 	producerInstance.BootstrapServer = config.BootstrapServer
 	producerInstance.KafkaConfig = sarama.NewConfig()
+	if config.ProducerConfig.MinVersion {
+		producerInstance.KafkaConfig.Version = sarama.MinVersion
+	}
 	producerInstance.KafkaConfig.Producer.Partitioner = sarama.NewRandomPartitioner
 	producerInstance.KafkaConfig.Producer.RequiredAcks = sarama.WaitForAll
 	producerInstance.KafkaConfig.Producer.Return.Successes = true
@@ -50,7 +55,7 @@ func NewProducer(config config.KafkaConfig) (Producer KafkaProducer, err error) 
 	}
 
 	// Authenticate against kafka broker using TLS if required
-	if config.Tls.Enabled == true {
+	if config.Tls.Enabled {
 		tlsConfig, err := common.NewTLSConfig(config.Tls.ClientCert,
 			config.Tls.ClientKey,
 			config.Tls.ClusterCert)
@@ -70,27 +75,39 @@ func NewProducer(config config.KafkaConfig) (Producer KafkaProducer, err error) 
 	return producerInstance, err
 }
 
-//Start function for run the synchronous producer
+//Start function for run the synchronous producer in a loop
 func (k *producer) Start() {
 	for {
-		message := &sarama.ProducerMessage{
-			Topic:     k.Topic,
-			Partition: -1,
-			Value:     sarama.StringEncoder("example message"),
+		select {
+		default:
+			message := &sarama.ProducerMessage{
+				Topic:     k.Topic,
+				Partition: -1,
+				Value:     sarama.StringEncoder("example message"),
+			}
+			timer := prometheus.NewTimer(metrics.MessageSendDuration.WithLabelValues(k.BootstrapServer, k.Topic))
+			err := k.SendMessage(message)
+			if err != nil {
+				metrics.ClusterUp.WithLabelValues(k.BootstrapServer).Set(0)
+			} else {
+				metrics.ClusterUp.WithLabelValues(k.BootstrapServer).Set(1)
+			}
+			timer.ObserveDuration()
+		case <-k.stopchan:
+			return
 		}
-		timer := prometheus.NewTimer(metrics.MessageSendDuration.WithLabelValues(k.BootstrapServer, k.Topic))
-		err := k.sendMessage(message)
-		if err != nil {
-			metrics.ClusterUp.WithLabelValues(k.BootstrapServer).Set(0)
-		} else {
-			metrics.ClusterUp.WithLabelValues(k.BootstrapServer).Set(1)
-		}
-		timer.ObserveDuration()
 	}
 }
 
+func (k *producer) Stop() {
+	logrus.Info("Closing go producer......")
+	k.stopchan <- true
+	close(k.stopchan)
+
+}
+
 //sendMessage and increase prometheus metrics if success/fail
-func (k *producer) sendMessage(msg *sarama.ProducerMessage) error {
+func (k *producer) SendMessage(msg *sarama.ProducerMessage) error {
 	partition, offset, err := k.KafkaClient.SendMessage(msg)
 	if err != nil {
 		logrus.Error("Error sending message " + err.Error())

@@ -11,6 +11,7 @@ import "github.com/vmware/service-level-indicator-exporter-for-kafka/config"
 - [type Config](<#type-config>)
   - [func (config *Config) LogConfig()](<#func-config-logconfig>)
 - [type ConfigManager](<#type-configmanager>)
+- [type ConsumerConfig](<#type-consumerconfig>)
 - [type KafkaConfig](<#type-kafkaconfig>)
 - [type Log](<#type-log>)
 - [type ProducerConfig](<#type-producerconfig>)
@@ -46,6 +47,14 @@ type ConfigManager interface {
 }
 ```
 
+## type ConsumerConfig
+
+```go
+type ConsumerConfig struct {
+    FromBeginning bool
+}
+```
+
 ## type KafkaConfig
 
 ```go
@@ -54,6 +63,7 @@ type KafkaConfig struct {
     Topic           string
     Tls             TlsConfig
     ProducerConfig  ProducerConfig
+    ConsumerConfig  ConsumerConfig
 }
 ```
 
@@ -70,6 +80,7 @@ type Log struct {
 ```go
 type ProducerConfig struct {
     MessagesSecond int32
+    MinVersion     bool
 }
 ```
 

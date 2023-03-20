@@ -36,7 +36,8 @@ KafkaProducer interface
 ```go
 type KafkaProducer interface {
     Start()
-    // contains filtered or unexported methods
+    Stop()
+    SendMessage(*sarama.ProducerMessage) error
 }
 ```
 

@@ -18,10 +18,16 @@ type KafkaConfig struct {
 	Topic           string
 	Tls             TlsConfig
 	ProducerConfig  ProducerConfig
+	ConsumerConfig  ConsumerConfig
 }
 
 type ProducerConfig struct {
 	MessagesSecond int32
+	MinVersion     bool
+}
+
+type ConsumerConfig struct {
+	FromBeginning bool
 }
 
 type TlsConfig struct {
