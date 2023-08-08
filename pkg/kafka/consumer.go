@@ -10,7 +10,7 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	"github.com/sirupsen/logrus"
 	"github.com/vmware/service-level-indicator-exporter-for-kafka/config"
 	"github.com/vmware/service-level-indicator-exporter-for-kafka/pkg/common"

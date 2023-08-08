@@ -7,7 +7,7 @@ import (
 
 	"github.com/vmware/service-level-indicator-exporter-for-kafka/pkg/metrics"
 
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/sirupsen/logrus"
 	"github.com/vmware/service-level-indicator-exporter-for-kafka/config"
